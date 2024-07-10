@@ -1,28 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:my_banner/views/signinscreen.dart'; // Ensure the correct path
+import 'package:my_banner/authentication/first.dart'; // Assuming this is where HomePAGE is defined
+import 'package:my_banner/authentication/home.dart';
+import 'package:my_banner/authentication/login.dart';
+import 'package:my_banner/authentication/register.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  FirebaseAuth.instance.setLanguageCode('en'); // Set the locale globally
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
+      initialRoute: 'first',
+      routes: {
+        'first': (context) => HomePAGE(),
+        'register': (context) => Register(),
+        'login': (context) => LoginScreen(),
+        'home': (context) => myhome(),
+      },
+      title: 'Data Store',
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.amber,
+        appBarTheme: const AppBarTheme(color: Colors.purple),
       ),
-      home: const Signinscreen(), // Ensure this widget is correctly defined and imported
+      home: const HomePAGE(),
     );
   }
 }
