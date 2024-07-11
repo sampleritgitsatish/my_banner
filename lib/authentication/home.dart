@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: camel_case_types
 class myhome extends StatefulWidget {
   const myhome({super.key});
 
@@ -7,14 +8,15 @@ class myhome extends StatefulWidget {
   State<myhome> createState() => _myhomeState();
 }
 
+// ignore: camel_case_types
 class _myhomeState extends State<myhome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('home'),
+        title: const Text('home'),
       ),
-      body: Center(
+      body: const Center(
         child:Text('Home screen'),
       )
     );

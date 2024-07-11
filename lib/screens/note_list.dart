@@ -60,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // Refresh the data after addition
       _fetchData();
     } catch (e) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to add user: $e')),
       );

@@ -16,7 +16,7 @@ class _HomePAGEState extends State<HomePAGE> {
       body: Stack(
         children: [
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/home_background.jpg'), // Replace with your background image
                 fit: BoxFit.cover,
@@ -32,7 +32,7 @@ class _HomePAGEState extends State<HomePAGE> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Welcome to My Banner',
                     style: TextStyle(
                       fontSize: 32,
@@ -41,52 +41,52 @@ class _HomePAGEState extends State<HomePAGE> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                        MaterialPageRoute(builder: (context) => const LoginScreen()),
                       );
                     },
-                    child: Text('Login'),
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       backgroundColor: Colors.blueAccent,
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                         fontSize: 18,
                       ),
                     ),
+                    child: const Text('Login'),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Register()),
+                        MaterialPageRoute(builder: (context) => const Register()),
                       );
                     },
-                    child: Text('Register'),
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       backgroundColor: Colors.greenAccent,
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                         fontSize: 18,
                       ),
                     ),
+                    child: const Text('Register'),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextButton(
                     onPressed: () {
                       // Add your functionality here if needed
                     },
-                    child: Text(
+                    child: const Text(
                       'Forgot Password?',
                       style: TextStyle(
                         color: Colors.white,

@@ -1,30 +1,78 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:my_banner/authentication/home.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-class LoginScreen extends StatelessWidget {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
-  LoginScreen({super.key});
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
 
-  Future<void> login(BuildContext context) async {
+class _LoginScreenState extends State<LoginScreen> {
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+  // Method to handle sign-in with Google
+  Future<void> _signInWithGoogle() async {
     try {
-      UserCredential credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-      User? user = credential.user;
-      if (user != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => myhome()),
+      // Trigger Google sign-in
+      final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
+      if (googleSignInAccount != null) {
+        // Get authentication details from Google
+        final GoogleSignInAuthentication googleAuth = await googleSignInAccount.authentication;
+        // Create Firebase credentials using Google's tokens
+        final OAuthCredential credential = GoogleAuthProvider.credential(
+          idToken: googleAuth.idToken,
+          accessToken: googleAuth.accessToken,
         );
+        // Sign in with Firebase using the credentials
+        final UserCredential userCredential = await _firebaseAuth.signInWithCredential(credential);
+        final User? user = userCredential.user;
+        if (user != null) {
+          // If sign-in is successful, show user's Google authentication credentials
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Google Authentication Credentials'),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('Name: ${user.displayName}'),
+                    Text('Email: ${user.email}'),
+                    Text('Photo URL: ${user.photoURL}'),
+                    Text('UID: ${user.uid}'),
+                  ],
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Close'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          // Handle sign-in failure
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Failed to sign in with Google.'),
+            ),
+          );
+        }
       }
     } catch (e) {
+      print('Error signing in with Google: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login error: $e')),
+        SnackBar(
+          content: Text('Failed to sign in with Google: $e'),
+        ),
       );
     }
   }
@@ -32,122 +80,85 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/background.jpg'), // Replace with your background image
-                fit: BoxFit.cover,
+      appBar: AppBar(
+        title: const Text('Login'),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const Text(
+              'Welcome!',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            const TextField(
+              decoration: InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(),
               ),
             ),
-          ),
-          Container(
-            color: Colors.black.withOpacity(0.6),
-          ),
-          Center(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'Login',
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: 40),
-                      TextFormField(
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                          hintText: 'Enter your email',
-                          labelStyle: TextStyle(color: Colors.white),
-                          hintStyle: TextStyle(color: Colors.white70),
-                          filled: true,
-                          fillColor: Colors.white.withOpacity(0.1),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                        style: TextStyle(color: Colors.white),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your email';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 20),
-                      TextFormField(
-                        controller: _passwordController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          hintText: 'Enter your password',
-                          labelStyle: TextStyle(color: Colors.white),
-                          hintStyle: TextStyle(color: Colors.white70),
-                          filled: true,
-                          fillColor: Colors.white.withOpacity(0.1),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                        style: TextStyle(color: Colors.white),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            login(context);
-                          }
-                        },
-                        child: Text('Login'),
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(vertical: 16.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          backgroundColor: Colors.blueAccent,
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      TextButton(
-                        onPressed: () {
-                          // Handle "Forgot Password?" action
-                        },
-                        child: Text(
-                          'Forgot Password?',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ],
+            const SizedBox(height: 20),
+            const TextField(
+              decoration: InputDecoration(
+                labelText: 'Password',
+                border: OutlineInputBorder(),
+              ),
+              obscureText: true,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Add login functionality here
+              },
+              child: const Center(child: Text('Login')),
+            ),
+            const SizedBox(height: 10),
+            Center(
+              child: ElevatedButton.icon(
+                onPressed: _signInWithGoogle,
+                icon: const FaIcon(FontAwesomeIcons.google, color: Colors.black),
+                label: const Text('Login with Google'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black, // Text color
+                  elevation: 3, // Shadow color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 20),
+            Center(
+              child: GestureDetector(
+                onTap: () async {
+                  final GoogleSignIn gSignIn = GoogleSignIn();
+                  try {
+                    final GoogleSignInAccount? gSignInAccount = await gSignIn.signIn();
+                    if (gSignInAccount != null) {
+                      final GoogleSignInAuthentication gSignInAuth = await gSignInAccount.authentication;
+                      final AuthCredential credential = GoogleAuthProvider.credential(
+                        idToken: gSignInAuth.idToken,
+                        accessToken: gSignInAuth.accessToken,
+                      );
+                      await _firebaseAuth.signInWithCredential(credential);
+                    }
+                  } catch (e) {
+                    print(e);
+                  }
+                },
+                child: const Text(
+                  "Don't have an account? Sign up",
+                  style: TextStyle(color: Colors.blue),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-
-

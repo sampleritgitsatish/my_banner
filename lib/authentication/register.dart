@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Register extends StatefulWidget {
-  const Register({Key? key}) : super(key: key);
+  const Register({super.key});
 
   @override
   _RegisterState createState() => _RegisterState();
@@ -42,12 +42,12 @@ class _RegisterState extends State<Register> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Error'),
+        title: const Text('Error'),
         content: Text(message),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
         ],
       ),
@@ -60,7 +60,7 @@ class _RegisterState extends State<Register> {
       body: Stack(
         children: [
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/register_background.jpg'), // Replace with your background image
                 fit: BoxFit.cover,
@@ -78,7 +78,7 @@ class _RegisterState extends State<Register> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
+                    const Text(
                       'Register',
                       style: TextStyle(
                         fontSize: 32,
@@ -87,15 +87,15 @@ class _RegisterState extends State<Register> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 40),
+                    const SizedBox(height: 40),
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         labelText: 'Email',
                         hintText: 'Enter your email',
-                        labelStyle: TextStyle(color: Colors.white),
-                        hintStyle: TextStyle(color: Colors.white70),
+                        labelStyle: const TextStyle(color: Colors.white),
+                        hintStyle: const TextStyle(color: Colors.white70),
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.1),
                         border: OutlineInputBorder(
@@ -103,17 +103,17 @@ class _RegisterState extends State<Register> {
                           borderSide: BorderSide.none,
                         ),
                       ),
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     TextFormField(
                       controller: _passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'Password',
                         hintText: 'Enter your password',
-                        labelStyle: TextStyle(color: Colors.white),
-                        hintStyle: TextStyle(color: Colors.white70),
+                        labelStyle: const TextStyle(color: Colors.white),
+                        hintStyle: const TextStyle(color: Colors.white70),
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.1),
                         border: OutlineInputBorder(
@@ -121,26 +121,26 @@ class _RegisterState extends State<Register> {
                           borderSide: BorderSide.none,
                         ),
                       ),
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: registerUser,
-                      child: Text('Create Account'),
                       style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(vertical: 16.0),
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                         backgroundColor: Colors.blueAccent,
                       ),
+                      child: const Text('Create Account'),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     TextButton(
                       onPressed: () {
                         Navigator.pop(context); // Go back to the previous screen
                       },
-                      child: Text(
+                      child: const Text(
                         'Already have an account? Log in',
                         style: TextStyle(color: Colors.white),
                       ),
