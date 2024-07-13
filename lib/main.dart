@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:my_banner/authentication/home.dart';
- // Assuming this is where HomePAGE is defined
-
 import 'package:my_banner/authentication/login.dart';
-
 import 'firebase_options.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,20 +19,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute:'login' ,
-      routes: {
-       'login':(context)=>const LoginScreen(),
-       'home':(context)=>const myhome(),
-       
-
-      },
-      
       title: 'Data Store',
-      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         appBarTheme: const AppBarTheme(color: Colors.purple),
       ),
-      home:  const LoginScreen(),
+      debugShowCheckedModeBanner: false,
+      home: const LoginScreen(),
     );
   }
 }

@@ -72,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       await FirebaseFirestore.instance.collection('users').doc(userId).delete();
 
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('User deleted successfully!')),
       );
@@ -79,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // Refresh the data after deletion
       _fetchData();
     } catch (e) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to delete user: $e')),
       );
@@ -94,6 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
         'password': password,
       });
 
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('User updated successfully!')),
       );
@@ -101,6 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // Refresh the data after update
       _fetchData();
     } catch (e) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to update user: $e')),
       );
